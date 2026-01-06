@@ -98,12 +98,15 @@ const Admin = mongoose.model("Admin", adminSchema);
 // EMAIL SENDER (Nodemailer)
 // --------------------------------------
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp-relay.brevo.com",
+  port: 587,
+  secure: false,
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS // Use Gmail App Password or transactional provider credentials
-  }
+    pass: process.env.EMAIL_PASS,
+  },
 });
+
 
 // Test transporter (optional)
 transporter.verify().then(() => console.log("✔ Email transporter verified")).catch((err) => console.warn("Email verify failed:", err && err.message));
