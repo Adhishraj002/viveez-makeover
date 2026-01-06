@@ -118,15 +118,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const payload = { name, phone, email, eventType, date, message };
 
       try {
-        // update this URL if your backend is deployed
+        // update this URL if your backend is deployed 
         const API_BASE = "https://viveez-makeover.onrender.com";
-        fetch(`${API_BASE}/api/book`, {
+        const res = await fetch(`${API_BASE}/api/book`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+          body: JSON.stringify(payload),
         });
-
-         const data = await res.json();
+        
+        const data = await res.json();
          
          if (data.success) {
           showModal(`<h3>Booking Received</h3><p>Thank you, ${name}! A confirmation will be sent to <b>${email}</b>. We will contact you soon.</p>`);
@@ -144,7 +144,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       } catch (err) {
         console.error(err);
-        showModal(`<h3>Network Error</h3><p>Unable to reach the server. Is the backend running at <code>http://localhost:5000</code> ?</p>`);
+        showModal(`<h3>Network Error</h3><p>Unable to reach the server. Please try again in a few seconds.</p>`);
+
       }
     });
   }
