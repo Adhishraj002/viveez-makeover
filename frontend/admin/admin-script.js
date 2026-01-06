@@ -47,7 +47,8 @@ document.addEventListener("DOMContentLoaded", () => {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/admin/login", {
+      const API_BASE = "https://viveez-makeover.onrender.com";
+      fetch(`${API_BASE}/api/admin/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
