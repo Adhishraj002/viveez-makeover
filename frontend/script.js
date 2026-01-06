@@ -119,13 +119,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
         // update this URL if your backend is deployed
-        const API_BASE = "/api/book";
-        const res = await fetch("/api/book", {
+        const API_BASE = "https://viveez-makeover.onrender.com";
+        fetch(`${API_BASE}/api/book`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(data),
         });
-
 
          const data = await res.json();
          
