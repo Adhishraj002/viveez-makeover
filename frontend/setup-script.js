@@ -64,7 +64,8 @@ document.addEventListener("DOMContentLoaded", () => {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/admin/setup", {
+      const API_BASE = window.CONFIG.API_BASE;
+      const response = await fetch(`${API_BASE}/api/admin/setup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -102,4 +103,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
 

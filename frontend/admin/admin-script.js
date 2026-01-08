@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setLoading(true);
 
     try {
-      const API_BASE = "https://viveez-makeover.onrender.com";
+      const API_BASE = window.CONFIG.API_BASE;
       fetch(`${API_BASE}/api/admin/login`, {
         method: "POST",
         headers: {
@@ -86,4 +86,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
 

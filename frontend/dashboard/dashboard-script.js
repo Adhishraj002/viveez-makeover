@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const API_BASE = window.CONFIG.API_BASE;
+
   // Check authentication
   const token = localStorage.getItem("adminToken");
   if (!token) {
@@ -57,7 +59,8 @@ document.addEventListener("DOMContentLoaded", () => {
       emptyState.style.display = "none";
       bookingsContainer.innerHTML = "";
 
-      const response = await fetch("/api/admin/bookings", {
+      const response = await fetch(`${API_BASE}/api/admin/bookings`, {
+
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -276,7 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Export PDF
   exportBtn.addEventListener("click", async () => {
     try {
-      const response = await fetch("/api/admin/bookings/pdf", {
+      const response = await fetch(`${API_BASE}/api/admin/bookings/pdf`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -323,4 +326,5 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initial load
   fetchBookings();
 });
+
 
