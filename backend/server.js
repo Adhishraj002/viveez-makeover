@@ -71,6 +71,26 @@ app.use(
   })
 );
 
+app.get("/test-email", async (req, res) => {
+  try {
+    await emailApi.sendTransacEmail({
+      sender: {
+        name: "Viveez Makeover",
+        email: "viveezmakeover@gmail.com",
+      },
+      to: [{ email: "viveezmakeover@gmail.com" }],
+      subject: "Brevo API Test",
+      htmlContent: "<p>Brevo API email works successfully 🎉</p>",
+    });
+
+    res.send("Email sent successfully");
+  } catch (err) {
+    console.error("EMAIL API ERROR:", err);
+    res.status(500).send(err.message);
+  }
+});
+
+
 // --------------------------------------
 // CONNECT TO MONGO
 // --------------------------------------
@@ -103,7 +123,10 @@ const Admin = mongoose.model("Admin", adminSchema);
 
 // --------------------------------------
 // EMAIL SENDER (Nodemailer)
-// ------------------------
+// -----------------------------------
+
+
+
 // --------------------------------------
 // HELPERS
 // --------------------------------------
@@ -250,27 +273,6 @@ app.post("/api/admin/setup", async (req, res) => {
     res.json({ success: false, message: "Setup failed" });
   }
 });
-
-
-app.get("/test-email", async (req, res) => {
-  try {
-    await emailApi.sendTransacEmail({
-      sender: {
-        name: "Viveez Makeover",
-        email: "viveezmakeover@gmail.com",
-      },
-      to: [{ email: "viveezmakeover@gmail.com" }],
-      subject: "Brevo API Test",
-      htmlContent: "<p>Brevo API email works successfully 🎉</p>",
-    });
-
-    res.send("Email sent successfully");
-  } catch (err) {
-    console.error("EMAIL API ERROR:", err);
-    res.status(500).send(err.message);
-  }
-});
-
 
 
 // --------------------------------------
