@@ -1189,3 +1189,76 @@ main,
     display: inline-flex;
   }
 }
+
+/* =============================== */
+/* HAMBURGER MENU */
+/* =============================== */
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  width: 26px;
+  height: 2px;
+  background: var(--accent-dark);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+/* MOBILE MENU PANEL */
+.mobile-menu {
+  position: fixed;
+  top: 70px;
+  right: -100%;
+  width: 100%;
+  height: calc(100vh - 70px);
+  background: linear-gradient(135deg, #f5e7d8, #e0cbb6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 40px;
+  gap: 22px;
+  transition: right 0.35s ease;
+  z-index: 999;
+}
+
+.mobile-menu a {
+  text-decoration: none;
+  font-size: 1.1rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-dark);
+}
+
+/* ACTIVE STATE */
+.mobile-menu.open {
+  right: 0;
+}
+
+/* HAMBURGER ANIMATION */
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* SHOW ONLY ON MOBILE */
+@media (max-width: 900px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-links {
+    display: none;
+  }
+}
