@@ -102,8 +102,8 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: "apikey",
+    pass: process.env.BREVO_SMTP_KEY,
   },
 });
 
@@ -115,34 +115,55 @@ transporter.verify().then(() => console.log("✔ Email transporter verified")).c
 // HELPERS
 // --------------------------------------
 function sendOwnerNotification(booking) {
-  const ownerHtml = `
-    <h2>New Booking Received</h2>
-    <p><b>Name:</b> ${booking.name}</p>
-    <p><b>Phone:</b> ${booking.phone}</p>
-    <p><b>Email:</b> ${booking.email || "Not provided"}</p>
-    <p><b>Event:</b> ${booking.eventType || "Not specified"}</p>
-    <p><b>Date:</b> ${booking.date || "Not specified"}</p>
-    <p><b>Message:</b> ${booking.message || "No message"}</p>
-    <p>Created at: ${new Date(booking.createdAt).toLocaleString()}</p>
-  `;
-
   return transporter.sendMail({
-    from: process.env.EMAIL_USER,
+    from: `"Viveez Makeover" <viveezmakeover@gmail.com>`,
     to: process.env.OWNER_EMAIL,
+
+    // VERY IMPORTANT FOR GMAIL DELIVERABILITY
+    replyTo: booking.email,
+
     subject: "New Booking - Viveez Makeover",
-    html: ownerHtml
+    html: `
+      <h3>New Booking Received</h3>
+      <p><b>Name:</b> ${booking.name}</p>
+      <p><b>Phone:</b> ${booking.phone}</p>
+      <p><b>Email:</b> ${booking.email}</p>
+      <p><b>Event:</b> ${booking.eventType}</p>
+      <p><b>Date:</b> ${booking.date || "N/A"}</p>
+      <p><b>Message:</b> ${booking.message || "N/A"}</p>
+    `,
   });
 }
+
 
 function sendCustomerConfirmation(booking) {
   if (!booking.email) return Promise.resolve();
+
   return transporter.sendMail({
-    from: process.env.EMAIL_USER,
+    from: `"Viveez Makeover" <viveezmakeover@gmail.com>`,
     to: booking.email,
+    replyTo: "viveezmakeover@gmail.com",
+
     subject: "Booking Confirmation - Viveez Makeover",
-    html: `<p>Hello ${booking.name},<br/>We received your booking for <b>${booking.eventType}</b>. We will contact you soon to confirm availability and details.</p>`
+    html: `
+      <p>Hello <b>${booking.name}</b>,</p>
+
+      <p>Thank you for contacting <b>Viveez Makeover</b>.</p>
+
+      <p>We received your booking request:</p>
+      <ul>
+        <li><b>Event:</b> ${booking.eventType}</li>
+        <li><b>Date:</b> ${booking.date || "To be discussed"}</li>
+      </ul>
+
+      <p>We will contact you shortly.</p>
+
+      <p>📞 95857 33112<br/>
+      💄 Viveez Makeover</p>
+    `,
   });
 }
+
 
 // --------------------------------------
 // CREATE BOOKING (Customer Form) - with validation & rate limit
@@ -245,6 +266,24 @@ app.post("/api/admin/setup", async (req, res) => {
     res.json({ success: false, message: "Setup failed" });
   }
 });
+
+
+app.get("/test-email", async (req, res) => {
+  try {
+    await transporter.sendMail({
+      from: `"Viveez Makeover" <viveezmakeover@gmail.com>`,
+      to: "viveezmakeover@gmail.com",
+      subject: "Brevo Gmail Test",
+      text: "If you received this, Brevo + Gmail works.",
+    });
+
+    res.send("Email sent successfully");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Email failed");
+  }
+});
+
 
 
 // --------------------------------------
