@@ -1202,7 +1202,7 @@ main,
 }
 
 .hamburger span {
-  width: 26px;
+  width: 28px;
   height: 2px;
   background: var(--accent-dark);
   border-radius: 4px;
@@ -1213,7 +1213,8 @@ main,
 .mobile-menu {
   position: fixed;
   top: 70px;
-  right: -100%;
+  right: -100%;   /* START OFFSCREEN RIGHT */
+  left: auto;     /* IMPORTANT */
   width: 100%;
   height: calc(100vh - 70px);
   background: linear-gradient(135deg, #f5e7d8, #e0cbb6);
@@ -1223,21 +1224,14 @@ main,
   padding-top: 40px;
   gap: 22px;
   transition: right 0.35s ease;
-  z-index: 999;
+  z-index: 9999;
 }
 
-.mobile-menu a {
-  text-decoration: none;
-  font-size: 1.1rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--accent-dark);
-}
-
-/* ACTIVE STATE */
+/* OPEN STATE */
 .mobile-menu.open {
   right: 0;
 }
+
 
 /* HAMBURGER ANIMATION */
 .hamburger.active span:nth-child(1) {
