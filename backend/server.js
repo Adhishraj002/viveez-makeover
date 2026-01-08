@@ -6,14 +6,21 @@ import cors from "cors";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import nodemailer from "nodemailer";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import morgan from "morgan";
 import { body, validationResult } from "express-validator";
+import SibApiV3Sdk from "sib-api-v3-sdk";
+
 
 dotenv.config();
 const app = express();
+
+const client = SibApiV3Sdk.ApiClient.instance;
+client.authentications["api-key"].apiKey = process.env.BREVO_API_KEY;
+
+const emailApi = new SibApiV3Sdk.TransactionalEmailsApi();
+
 
 // Needed for ES module path handling
 const __filename = fileURLToPath(import.meta.url);
@@ -96,73 +103,50 @@ const Admin = mongoose.model("Admin", adminSchema);
 
 // --------------------------------------
 // EMAIL SENDER (Nodemailer)
-// --------------------------------------
-const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: "apikey",
-    pass: process.env.BREVO_SMTP_KEY,
-  },
-});
-
-
-// Test transporter (optional)
-transporter.verify().then(() => console.log("✔ Email transporter verified")).catch((err) => console.warn("Email verify failed:", err && err.message));
-
+// ------------------------
 // --------------------------------------
 // HELPERS
 // --------------------------------------
-function sendOwnerNotification(booking) {
-  return transporter.sendMail({
-    from: `"Viveez Makeover" <viveezmakeover@gmail.com>`,
-    to: process.env.OWNER_EMAIL,
-
-    // VERY IMPORTANT FOR GMAIL DELIVERABILITY
-    replyTo: booking.email,
-
-    subject: "New Booking - Viveez Makeover",
-    html: `
-      <h3>New Booking Received</h3>
+async function sendOwnerNotification(booking) {
+  return emailApi.sendTransacEmail({
+    sender: {
+      name: "Viveez Makeover",
+      email: "viveezmakeover@gmail.com", // your gmail
+    },
+    to: [{ email: "viveezmakeover@gmail.com" }],
+    subject: "New Booking Received",
+    htmlContent: `
+      <h2>New Booking</h2>
       <p><b>Name:</b> ${booking.name}</p>
       <p><b>Phone:</b> ${booking.phone}</p>
       <p><b>Email:</b> ${booking.email}</p>
       <p><b>Event:</b> ${booking.eventType}</p>
-      <p><b>Date:</b> ${booking.date || "N/A"}</p>
-      <p><b>Message:</b> ${booking.message || "N/A"}</p>
+      <p><b>Date:</b> ${booking.date || "Not specified"}</p>
+      <p><b>Message:</b> ${booking.message || "-"}</p>
     `,
   });
 }
 
+async function sendCustomerConfirmation(booking) {
+  if (!booking.email) return;
 
-function sendCustomerConfirmation(booking) {
-  if (!booking.email) return Promise.resolve();
-
-  return transporter.sendMail({
-    from: `"Viveez Makeover" <viveezmakeover@gmail.com>`,
-    to: booking.email,
-    replyTo: "viveezmakeover@gmail.com",
-
-    subject: "Booking Confirmation - Viveez Makeover",
-    html: `
+  return emailApi.sendTransacEmail({
+    sender: {
+      name: "Viveez Makeover",
+      email: "viveezmakeover@gmail.com",
+    },
+    to: [{ email: booking.email }],
+    subject: "Booking Request Received – Viveez Makeover",
+    htmlContent: `
       <p>Hello <b>${booking.name}</b>,</p>
-
-      <p>Thank you for contacting <b>Viveez Makeover</b>.</p>
-
-      <p>We received your booking request:</p>
-      <ul>
-        <li><b>Event:</b> ${booking.eventType}</li>
-        <li><b>Date:</b> ${booking.date || "To be discussed"}</li>
-      </ul>
-
-      <p>We will contact you shortly.</p>
-
-      <p>📞 95857 33112<br/>
-      💄 Viveez Makeover</p>
+      <p>We have received your booking request for <b>${booking.eventType}</b>.</p>
+      <p>We will contact you shortly to confirm availability.</p>
+      <br/>
+      <p>– Viveez Makeover</p>
     `,
   });
 }
+
 
 
 // --------------------------------------
@@ -270,17 +254,20 @@ app.post("/api/admin/setup", async (req, res) => {
 
 app.get("/test-email", async (req, res) => {
   try {
-    await transporter.sendMail({
-      from: `"Viveez Makeover" <viveezmakeover@gmail.com>`,
-      to: "viveezmakeover@gmail.com",
-      subject: "Brevo Gmail Test",
-      text: "If you received this, Brevo + Gmail works.",
+    await emailApi.sendTransacEmail({
+      sender: {
+        name: "Viveez Makeover",
+        email: "viveezmakeover@gmail.com",
+      },
+      to: [{ email: "viveezmakeover@gmail.com" }],
+      subject: "Brevo API Test",
+      htmlContent: "<p>Brevo API email works successfully 🎉</p>",
     });
 
     res.send("Email sent successfully");
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Email failed");
+    console.error("EMAIL API ERROR:", err);
+    res.status(500).send(err.message);
   }
 });
 

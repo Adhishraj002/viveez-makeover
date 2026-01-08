@@ -18,7 +18,8 @@
     "mongoose": "^7.6.0",
     "morgan": "^1.10.0",
     "nodemailer": "^6.9.4",
-    "pdfkit": "^0.17.2"
+    "pdfkit": "^0.17.2",
+    "sib-api-v3-sdk": "^8.5.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
