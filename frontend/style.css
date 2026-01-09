@@ -1291,3 +1291,48 @@ main,
     z-index: 10000;
   }
 }
+
+@media (max-width: 900px) {
+
+  /* FIX PAGE SHIFT */
+  #page-packages .container {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-width: 94vw !important;
+  }
+
+  /* FIX ALL CONTAINERS */
+  .container {
+    width: 94vw !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  /* REMOVE HERO SHIFT */
+  .hero-brand {
+    transform: none !important;
+  }
+
+  /* FIX CARD WIDTH */
+  .hero-card {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* FIX HOME CONTACT IMAGE OVERFLOW */
+  .home-contact-section::after {
+    display: none !important;
+  }
+
+  /* FIX GRID */
+  .two-column,
+  .card-grid,
+  .testimonials-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* REMOVE ANY SIDE SCROLL */
+  html, body {
+    overflow-x: hidden !important;
+  }
+}
