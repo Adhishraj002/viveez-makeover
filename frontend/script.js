@@ -151,32 +151,29 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-const hamburger = document.getElementById("hamburger");
-const mobileMenu = document.getElementById("mobileMenu");
+  // ---------- HAMBURGER MENU (MOBILE ONLY) ----------
+  const hamburger = document.getElementById("hamburger");
+  const mobileMenu = document.getElementById("mobileMenu");
 
-hamburger.addEventListener("click", () => {
-  hamburger.classList.toggle("active");
-  mobileMenu.classList.toggle("open");
-});
+  if (hamburger && mobileMenu) {
 
-document.querySelectorAll(".mobile-menu a").forEach(link => {
-  link.addEventListener("click", (e) => {
-    const page = link.dataset.page;
-    if(page){
-      e.preventDefault();
-      showPage(page);
-    }
+    hamburger.addEventListener("click", () => {
+      hamburger.classList.toggle("active");
+      mobileMenu.classList.toggle("open");
+    });
 
-    hamburger.classList.remove("active");
-    mobileMenu.classList.remove("open");
-  });
-});
+    document.querySelectorAll(".mobile-menu a").forEach(link => {
+      link.addEventListener("click", (e) => {
 
+        const page = link.dataset.page;
+        if (page) {
+          e.preventDefault();
+          showPage(page);   // now works because inside same scope
+        }
 
-/* CLOSE MENU WHEN LINK CLICKED */
-document.querySelectorAll(".mobile-menu a").forEach(link => {
-  link.addEventListener("click", () => {
-    hamburger.classList.remove("active");
-    mobileMenu.classList.remove("open");
-  });
-});
+        hamburger.classList.remove("active");
+        mobileMenu.classList.remove("open");
+      });
+    });
+
+  }
