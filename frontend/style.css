@@ -1414,8 +1414,8 @@ main,
     height: 260px;
     margin: 20px 0;
     border-radius: 16px;
-    background-size: auto;
-    background-position: auto;
+    background-size: auto center;
+    background-position: auto center;
   }
 
   /* TEXT */
