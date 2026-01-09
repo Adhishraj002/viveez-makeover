@@ -149,9 +149,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-});
 
-  // ---------- HAMBURGER MENU (MOBILE ONLY) ----------
+    // ---------- HAMBURGER MENU (MOBILE ONLY) ----------
   const hamburger = document.getElementById("hamburger");
   const mobileMenu = document.getElementById("mobileMenu");
 
@@ -166,13 +165,14 @@ document.addEventListener("DOMContentLoaded", () => {
       link.addEventListener("click", (e) => {
         e.preventDefault();
         const page = link.dataset.page;
-        
-        if(page){
-          showPage(page);
-        }
-        
+        if (page) showPage(page);
+
         mobileMenu.classList.remove("open");
         hamburger.classList.remove("active");
       });
     });
   }
+
+});
+
+  

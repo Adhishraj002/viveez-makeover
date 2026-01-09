@@ -1120,24 +1120,6 @@ main,
     font-size: 0.9rem;
   }
 
-  /* REMOVE LARGE BACKGROUND IMAGES */
-  @media (max-width: 768px) {
-
-  .hero-bg-image,
-  .packages-decor-image,
-  .about-decor-image {
-    display: block;
-    position: relative;
-    width: 100%;
-    height: 300px;
-    margin-bottom: 20px;
-    border-radius: 18px;
-  }
-
-  .hero-bg-image {
-    background-position: center;
-    background-size: cover;
-  }
 }
 
 
@@ -1192,7 +1174,7 @@ main,
   .site-footer {
     text-align: center;
   }
-}
+
 
 /* MOBILE NAV FIX */
 @media (max-width: 900px) {
@@ -1348,5 +1330,101 @@ main,
   /* REMOVE ANY SIDE SCROLL */
   html, body {
     overflow-x: hidden !important;
+  }
+}
+
+/* ============================= */
+/* PERFECT MOBILE DESKTOP-STYLE */
+/* ============================= */
+
+@media (max-width: 900px) {
+
+  html, body {
+    overflow-x: hidden !important;
+  }
+
+  .container {
+    width: 94vw !important;
+    margin: auto !important;
+  }
+
+  /* NAV */
+  .nav-links {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  /* HERO */
+  .hero-inner {
+    flex-direction: column;
+    gap: 24px;
+    text-align: center;
+  }
+
+  .hero-brand-main {
+    font-size: 2rem;
+    letter-spacing: 0.18em;
+    white-space: normal;
+  }
+
+  .hero h1 {
+    font-size: 1.6rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  /* REMOVE DESKTOP ABS IMAGES */
+  .hero-bg-image,
+  .packages-decor-image,
+  .about-decor-image {
+    display: none !important;
+  }
+
+  /* STACK LAYOUT */
+  .two-column,
+  .card-grid,
+  .testimonials-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* TESTIMONIAL IMAGES */
+  .testimonial-img {
+    height: auto;
+    max-height: 360px;
+  }
+
+  /* PACKAGES */
+  .packages-header {
+    display: none;
+  }
+
+  .packages-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  /* CONTACT */
+  .home-contact-inner {
+    flex-direction: column;
+  }
+
+  /* HERO CARD */
+  .hero-card {
+    max-width: 340px;
+    margin: auto;
+  }
+
+  /* FOOTER */
+  .site-footer {
+    text-align: center;
   }
 }
