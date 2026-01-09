@@ -159,6 +159,20 @@ hamburger.addEventListener("click", () => {
   mobileMenu.classList.toggle("open");
 });
 
+document.querySelectorAll(".mobile-menu a").forEach(link => {
+  link.addEventListener("click", (e) => {
+    const page = link.dataset.page;
+    if(page){
+      e.preventDefault();
+      showPage(page);
+    }
+
+    hamburger.classList.remove("active");
+    mobileMenu.classList.remove("open");
+  });
+});
+
+
 /* CLOSE MENU WHEN LINK CLICKED */
 document.querySelectorAll(".mobile-menu a").forEach(link => {
   link.addEventListener("click", () => {
