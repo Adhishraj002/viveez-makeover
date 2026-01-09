@@ -164,16 +164,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.querySelectorAll(".mobile-menu a").forEach(link => {
       link.addEventListener("click", (e) => {
-
+        e.preventDefault();
         const page = link.dataset.page;
-        if (page) {
-          e.preventDefault();
-          showPage(page);   // now works because inside same scope
+        
+        if(page){
+          showPage(page);
         }
-
-        hamburger.classList.remove("active");
+        
         mobileMenu.classList.remove("open");
+        hamburger.classList.remove("active");
       });
     });
-
   }
